@@ -14,9 +14,17 @@ func main()
 
     do \view@create()
     do \view@setContents(contents)
-    for i(0, 10)
+    {for i(0, 10)
         do \view@render(i)
         do lib@sleep(1000)
-    end for
+    end for}
+    do \view@render(0)
+    while loop(true)
+        var cmd: char :: cui@inputChar()
+        do cui@print("\{cmd}\n")
+        if(cmd = 'q')
+            break loop
+        end if
+    end while
     do \view@close()
 end func
