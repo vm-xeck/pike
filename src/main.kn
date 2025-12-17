@@ -1,0 +1,22 @@
+func main()
+    var contents: []char
+    switch(^lib@cmdLine())
+    case 0
+        do cui@delimiter("")
+        do contents :: cui@inputStr()
+    case 1
+        var reader: file@Reader :: file@makeReader(lib@cmdLine()[0])
+        do reader.delimiter("")
+        do contents :: reader.readStr()
+    default
+        do \util@crash("Wrong number of arguments")
+    end switch
+
+    do \view@create()
+    do \view@setContents(contents)
+    for i(0, 10)
+        do \view@render(i)
+        do lib@sleep(1000)
+    end for
+    do \view@close()
+end func

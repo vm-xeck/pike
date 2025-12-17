@@ -1,0 +1,52 @@
++func init()
+    excode "}\n"
+    excode "#include <curses.h>\n"
+    excode "//"
+end func
+
++func initscr()
+    excode "initscr();\n"
+end func
+
++func refresh()
+    excode "refresh();\n"
+end func
+
++func endwin()
+    excode "endwin();\n"
+end func
+
++func clear()
+    excode "clear();\n"
+end func
+
++func curs_set(visibility: int): int
+    excode "int64_t visibility = "
+    do visibility :: visibility
+    excode "return curs_set(visibility);\n"
+end func
+
++func mvaddstr(y: int, x: int, str: []char)
+    excode "int64_t y = "
+    do y :: y
+    excode "int64_t x = "
+    do x :: x
+    excode "type_(Array_<char16_t>) str = "
+    do str :: str
+    excode "std::u16string s_ = str->B;\n"
+    excode "const std::string&t_ = utf16ToUtf8_(s_);\n"
+    excode "mvaddstr(y, x, t_.c_str());\n"
+end func
+
++func getmaxy(): int
+    excode "return getmaxy(stdscr);\n"
+end func
+
++func getmaxx(): int
+    excode "return getmaxx(stdscr);\n"
+end func
+
++func getmaxyx(y: &int, x: &int)
+    do y :: @getmaxy()
+    do x :: @getmaxx()
+end func

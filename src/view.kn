@@ -1,0 +1,24 @@
++var lines: [][]char
+
++func create()
+    do \curses@init()
+    do \curses@initscr()
+    do \curses@curs_set(0)
+    do \curses@refresh()
+end func
+
++func setContents(contents: []char)
+    do @lines :: contents.split("\n")
+end func
+
++func close()
+    do \curses@endwin()
+end func
+
++func render(lnum: int)
+    do \curses@clear()
+    for l(0, lib@min(\curses@getmaxy()-1, ^@lines-lnum-1))
+        do \curses@mvaddstr(l, 0, @lines[lnum+l])
+    end for
+    do \curses@refresh()
+end func

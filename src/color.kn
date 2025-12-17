@@ -1,0 +1,67 @@
+; なんかターミナルに出力する文字列に色をつけるやつ
+; 先頭のdはdarkの意
+
++func dblack(str: []char): []char
+    ret "\u001B[30m\{str}\u001B[0m"
+end func
+
++func dred(str: []char): []char
+    ret "\u001B[31m\{str}\u001B[0m"
+end func
+
++func dgreen(str: []char): []char
+    ret "\u001B[32m\{str}\u001B[0m"
+end func
+
++func dyellow(str: []char): []char
+    ret "\u001B[33m\{str}\u001B[0m"
+end func
+
++func dblue(str: []char): []char
+    ret "\u001B[34m\{str}\u001B[0m"
+end func
+
++func dmagenta(str: []char): []char
+    ret "\u001B[35m\{str}\u001B[0m"
+end func
+
++func dcyan(str: []char): []char
+    ret "\u001B[36m\{str}\u001B[0m"
+end func
+
++func dwhite(str: []char): []char
+    ret "\u001B[37m\{str}\u001B[0m"
+end func
+
+
++func black(str: []char): []char
+    ret "\u001B[90m\{str}\u001B[0m"
+end func
+
++func red(str: []char): []char
+    ret "\u001B[91m\{str}\u001B[0m"
+end func
+
++func green(str: []char): []char
+    ret "\u001B[92m\{str}\u001B[0m"
+end func
+
++func yellow(str: []char): []char
+    ret "\u001B[93m\{str}\u001B[0m"
+end func
+
++func blue(str: []char): []char
+    ret "\u001B[94m\{str}\u001B[0m"
+end func
+
++func magenta(str: []char): []char
+    ret "\u001B[95m\{str}\u001B[0m"
+end func
+
++func cyan(str: []char): []char
+    ret "\u001B[96m\{str}\u001B[0m"
+end func
+
++func white(str: []char): []char
+    ret "\u001B[97m\{str}\u001B[0m"
+end func

@@ -1,0 +1,23 @@
+; エラーメッセージを表示して停止
++func crash(msg: []char)
+    do @printErr("\{\color@red("Error")}: \{msg}\n")
+    do cui@flush()
+    assert false
+end func
+
+; stderrに出力
++func printErr(str: []char)
+    if(str =& null)
+        excode "fputs(\"(null)\", stderr);\n"
+        excode "return;\n"
+    end if
+    excode "type_(Array_<char16_t>) str = "
+    do str :: str
+    excode "#if defined(_WIN32)\n"
+    excode "fputws(reinterpret_cast<const wchar_t*>(str->B), stderr);\n"
+    excode "#else\n"
+    excode "std::u16string s_ = str->B;\n"
+    excode "const std::string&t_=utf16ToUtf8_(s_);\n"
+    excode "fputs(t_.c_str(), stderr);\n"
+    excode "#endif\n"
+end func
