@@ -1,0 +1,68 @@
++enum Key
+    zero :: 48
+    one
+    two
+    three
+    four
+    five
+    six
+    seven
+    eight
+    nine
+    a :: 97
+    b
+    c
+    d
+    e
+    f
+    g
+    h
+    i
+    j
+    k
+    l
+    m
+    n
+    o
+    p
+    q
+    r
+    s
+    t
+    u
+    v
+    w
+    x
+    y
+    z
+    up
+    down
+    pgup
+    pgdn
+    enter
+    bs
+    sp
+    comma
+    period
+    slash
+    bslash
+    semicolon
+    colon
+    at
+end enum
+
++class Cmd()
+    +var key: @Key
+    +var shift: bool
+    +var ctrl: bool
+    +var alt: bool
+end func
+
++func makeCmd(key: @Key, shift: bool, ctrl: bool, alt: bool): @Cmd
+    var cmd: @Cmd :: #@Cmd
+    do cmd.key :: @Key
+    do cmd.shift :: shift
+    do cmd.ctrl :: ctrl
+    do cmd.alt :: alt
+    ret cmd
+end func

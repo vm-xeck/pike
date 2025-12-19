@@ -38,6 +38,16 @@ end func
     excode "mvaddstr(y, x, t_.c_str());\n"
 end func
 
++func keypad(bf: bool)
+    excode "bool bf = "
+    do bf :: bf
+    excode "keypad(stdscr, bf);\n"
+end func
+
++func getch(): int
+    excode "return getch();\n"
+end func
+
 +func getmaxy(): int
     excode "return getmaxy(stdscr);\n"
 end func

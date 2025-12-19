@@ -4,6 +4,7 @@
     do \curses@init()
     do \curses@initscr()
     do \curses@curs_set(0)
+    do \curses@keypad(true)
     do \curses@refresh()
 end func
 

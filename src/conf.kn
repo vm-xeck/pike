@@ -1,0 +1,129 @@
++class Config()
+    +var up: \cmd@Cmd
+    +var down: \cmd@Cmd
+    +var top: \cmd@Cmd
+    +var bottom: \cmd@Cmd
+    +var search: \cmd@Cmd
+    +var next: \cmd@Cmd
+    +var prev: \cmd@Cmd
+    +var line: \cmd@Cmd
+    +var normal: \cmd@Cmd
+    +var quit: \cmd@Cmd
+
+    +var showLinenum: bool
+    +var color: bool
+    ; +var fgColor: \??@Color TODO
+    ; +var bgColor: \??@Color TODO
+    +var immediateSearch: bool
+
+    *func ctor()
+        do me.up :: \cmd@makeCmd(%up, false, false, false)
+        do me.down :: \cmd@makeCmd(%down, false, false, false)
+        do me.top :: \cmd@makeCmd(%up, false, true, false)
+        do me.bottom :: \cmd@makeCmd(%down, false, true, false)
+        do me.search :: \cmd@makeCmd(%f, false, true, false)
+        do me.next :: \cmd@makeCmd(%n, false, true, false)
+        do me.prev :: \cmd@makeCmd(%p, false, true, false)
+        do me.line :: \cmd@makeCmd(%l, false, true, false)
+        do me.normal :: \cmd@makeCmd(%esc, false, false, false)
+        do me.quit :: \cmd@makeCmd(%q, false, true, false)
+
+        do me.showLinenum :: true
+        do me.color :: false
+        do me.immediateSearch :: true
+    end func
+end class
+
++func parse(conf: []char): @Config
+    var lines: [][]char :: conf.split("\n")
+    var config: @Config :: #@Config
+    var i: int :: 0
+    while(i < ^lines)
+        switch(lines[i])
+        case "[command]"
+            do i :+ 1
+            var rules: [][]char :: #[0,0]char
+            while cl(i<^lines & lines[i][0]<>'[')
+                if(lines[i] = "")
+                    skip cl
+                end if
+                do rules :~ lines[i]
+                do i :+ 1
+            end while
+            do @parseCommand(rules, &config)
+        case "[appearance]"
+            do i :+ 1
+            var rules: [][]char :: #[0,0]char
+            while al(i<^lines & lines[i][0]<>'[')
+                if(lines[i] = "")
+                    skip al
+                end if
+                do rules :~ lines[i]
+                do i :+ 1
+            end while
+            do @parseAppearance(rules, &config)
+        default
+            do \util@crash("Failed to parse invalid conf section: \{(lines[i]=&null)?("(null)", lines[i])}")
+            ; TODO: nullにはならない気がする
+        end switch
+    end while
+    ret config
+end func
+
++func parseCommand(rules: [][]char, config: &@Config)
+    for i(0, ^rules-1)
+        var elems: [][]char :: rules[i].split("=")
+        var action: []char :: elems[0].trim()
+        var cmd: \cmd@Cmd :: @nameToCmd(elems[1].trim())
+        switch(action)
+        case "up"
+            do config.up :: cmd
+        case "down"
+            do config.down :: cmd
+        case "top"
+            do config.top :: cmd
+        case "bottom"
+            do config.bottom :: cmd
+        case "search"
+            do config.search :: cmd
+        case "next"
+            do config.next :: cmd
+        case "prev"
+            do config.prev :: cmd
+        case "line"
+            do config.line :: cmd
+        case "normal"
+            do config.normal :: cmd
+        case "quit"
+            do config.quit :: cmd
+        default
+            do \util@crash("Failed to parse command for invalid action: \{action}")
+        end switch
+    end for
+end func
+
++func parseAppearance(rules: [][]char, config: &@Config)
+    for i(0, ^rules-1)
+        var elems: [][]char :: rules[i].split("=")
+        var name: []char :: elems[0].trim()
+        var cond: bool
+        switch(elems[1].trim())
+        case "true"
+            do cond :: true
+        case "false"
+            do cond :: false
+        default
+            do \util@crash("Invalid condition \{elems[1].trim()}: should be true or false")
+        end switch
+        switch(name)
+        case "show_linenum"
+            do config.show_linenum :: cond
+        case "color"
+            do config.color :: cond
+        case "immediate_search"
+            do config.immediate_search :: cond
+        default
+            do \util@crash("Failed to parse command for invalid action: \{action}")
+        end switch
+    end for
+end func
