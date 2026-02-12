@@ -1,0 +1,39 @@
+func main()
+    var text: []char
+    switch(^lib@cmdLine())
+    case 0
+        ; do cui@delimiter("")
+        ; do contents :: cui@inputStr()
+        do text :: cui@input()
+    case 1
+        var reader: file@Reader :: file@makeReader(lib@cmdLine()[0])
+        do reader.delimiter("")
+        do text :: reader.readStr()
+    default
+        do \util@crash("Wrong number of arguments")
+    end switch
+
+    do \view@create()
+    do \view@setText(text)
+    do \view@render(0)
+    while loop(true)
+        var cmd: []char :: \view@input()
+        switch(cmd)
+        case "^Q"
+            break loop
+        case "KEY_UP"
+            do \view@scroll(-1)
+        case "KEY_DOWN"
+            do \view@scroll(1)
+        case "KEY_PPAGE"
+            do \view@scroll(-20)
+        case "KEY_NPAGE"
+            do \view@scroll(20)
+        case "KEY_RESIZE"
+            do \view@scroll(0)
+        default
+            do cui@print(cmd ~ "\n")
+        end switch
+    end while
+    do \view@close()
+end func

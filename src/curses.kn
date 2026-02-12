@@ -1,0 +1,118 @@
++func init()
+    excode "}\n"
+    excode "#include <curses.h>\n"
+    excode "//"
+end func
+
++func initscr()
+    excode "initscr();\n"
+end func
+
++func refresh()
+    excode "refresh();\n"
+end func
+
++func endwin()
+    excode "endwin();\n"
+end func
+
++func clear()
+    excode "clear();\n"
+end func
+
++func raw()
+    excode "raw();\n"
+end func
+
++func noecho()
+    excode "noecho();\n"
+end func
+
++func getscrreg(top: &int, bottom: &int): int
+    var results: []int :: inner()
+    do top :: results[1]
+    do bottom :: results[2]
+    ret results[0]
+    func inner(): []int
+        excode "int top, bottom;\n"
+        excode "int result = wgetscrreg(stdscr, &top, &bottom);\n"
+        excode "type_(Array_<int64_t>) r = new_(Array_<int64_t>)();\n"
+        excode "r->L = 3;\n"
+        excode "r->B = newPrimArray_(static_cast<std::size_t>(3 + bufLen_<int64_t>()), int64_t);\n"
+        excode "r->B[0] = result;\n"
+        excode "r->B[1] = top;\n"
+        excode "r->B[2] = bottom;\n"
+        excode "return r;\n"
+    end func
+end func
+
++func scrl(n: int): int
+    excode "int64_t n = "
+    do n :: n
+    excode "return scrl(n);\n"
+end func
+
++func scrollok(bf: bool)
+    excode "bool bf = "
+    do bf :: bf
+    excode "scrollok(stdscr, bf);\n"
+end func
+
++func idlok(bf: bool)
+    excode "bool bf = "
+    do bf :: bf
+    excode "idlok(stdscr, bf);\n"
+end func
+
++func curs_set(visibility: int): int
+    excode "int64_t visibility = "
+    do visibility :: visibility
+    excode "return curs_set(visibility);\n"
+end func
+
++func mvaddstr(y: int, x: int, str: []char)
+    excode "int64_t y = "
+    do y :: y
+    excode "int64_t x = "
+    do x :: x
+    excode "type_(Array_<char16_t>) str = "
+    do str :: str
+    excode "std::u16string s_ = str->B;\n"
+    excode "const std::string&t_ = utf16ToUtf8_(s_);\n"
+    excode "mvaddstr(y, x, t_.c_str());\n"
+end func
+
++func keypad(bf: bool)
+    excode "bool bf = "
+    do bf :: bf
+    excode "keypad(stdscr, bf);\n"
+end func
+
++func getch(): int
+    excode "return getch();\n"
+end func
+
++func keyname(ch: int): []char
+    excode "int64_t ch = "
+    do ch :: ch
+    excode "const char* c = keyname(ch);\n"
+    excode "std::u16string s = utf8ToUtf16_(c);\n"
+    excode "type_(Array_<char16_t>) x = new_(Array_<char16_t>)();\n"
+    excode "x->L = static_cast<int64_t>(s.size());\n"
+    excode "x->B = newPrimArray_(static_cast<std::size_t>(s.size()+1), char16_t);\n"
+    excode "memcpy(x->B, s.c_str(), sizeof(char16_t) * static_cast<std::size_t>(s.size()+1));\n"
+    excode "return(x);\n"
+end func
+
++func getmaxy(): int
+    excode "return getmaxy(stdscr);\n"
+end func
+
++func getmaxx(): int
+    excode "return getmaxx(stdscr);\n"
+end func
+
++func getmaxyx(y: &int, x: &int)
+    do y :: @getmaxy()
+    do x :: @getmaxx()
+end func

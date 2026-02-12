@@ -1,0 +1,75 @@
+var buf: @Buf
+
+class Buf()
+    +var lines: [][]char
+    +var head: int
+    +var tail: int
+    +func setHead(head: int)
+        do me.head :: lib@min(^me.lines-1, lib@max(0, head))
+        do me.tail :: lib@min(me.head+\curses@getmaxy()-1, ^me.lines-1)
+    end func
+    +func get(): [][]char
+        ret me.lines.sub(me.head, me.tail-me.head+1)
+    end func
+    +func getDiff(rel: &int): [][]char
+        var oldHead: int :: me.head
+        var oldTail: int :: me.tail
+        do me.setHead(me.head+rel)
+        var newHead: int :: me.head
+        var newTail: int :: me.tail
+        do rel :: newHead - oldHead
+
+        if(newHead < oldHead)
+            ret me.lines.sub(newHead, oldHead-newHead)
+        else
+            ret me.lines.sub(lib@min(^me.lines-1, oldTail+1), newTail-oldTail)
+        end if
+    end func
+end class
+
+func makeBuf(lines: [][]char): @Buf
+    var buf: @Buf :: #@Buf
+    do buf.lines :: lines
+    do buf.setHead(0)
+    ret buf
+end func
+
++func create()
+    do \curses@init()
+    do \curses@initscr()
+    do \curses@noecho()
+    do \curses@raw()
+    do \curses@scrollok(true)
+    do \curses@curs_set(0)
+    do \curses@keypad(true)
+    do \curses@refresh()
+end func
+
++func setText(text: []char)
+    do @buf :: @makeBuf(text.split("\n"))
+end func
+
++func close()
+    do \curses@endwin()
+end func
+
++func scroll(rel: int)
+    var diff: [][]char ::  @buf.getDiff(&rel)
+    do \curses@scrl(rel)
+    if(rel < 0)
+        do \curses@mvaddstr(0, 0, diff.join("\n"))
+    else
+        do \curses@mvaddstr(\curses@getmaxy()-rel, 0, diff.join("\n"))
+    end if
+end func
+
++func render(head: int)
+    do \curses@clear()
+    do @buf.setHead(head)
+    do \curses@mvaddstr(0, 0, @buf.get().join("\n"))
+    do \curses@refresh()
+end func
+
++func input(): []char
+    ret \curses@keyname(\curses@getch())
+end func
